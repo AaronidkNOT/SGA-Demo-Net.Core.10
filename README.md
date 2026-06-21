@@ -1,4 +1,4 @@
-# SGA — Sistema de Gestión Académica
+# SGA — Sistema de Gestión Académica - Desarrollado en 2026
 
 Sistema de gestión académica para un instituto terciario real (ISP N°62), usado en producción por alumnos, profesores y administrativos. Esta es la versión backend en **ASP.NET Core (.NET 10)**, en proceso de alcanzar paridad de funcionalidades con la versión en producción (PHP).
 
