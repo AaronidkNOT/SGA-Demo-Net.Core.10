@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/imagenes/favicon.png">
+    <link rel="apple-touch-icon" href="/imagenes/favicon.png">
+</head>
+<body>
+
+    <div class="mobile-block">
+        <div class="icon">🖥️</div>
+        <h2>No disponible en celular</h2>
+        <p>
+            El Panel Administrativo está diseñado para usarse desde una computadora o tablet en horizontal.
+            Por favor, accedé desde un dispositivo con pantalla más grande.
+        </p>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="container fade-in">
+        <nav class="navbar">
+            <div class="navbar-brand">Portal<span> Administrativo</span></div>
+        </nav>
+
+        <div id="loginSection" class="glass-card" style="max-width: 400px; margin: 10vh auto; text-align: center;">
+            <h2>Acceso Directivo</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Solo personal autorizado.</p>
+            <form id="loginFormAdmin">
+                <div class="input-group">
+                    <input type="text" id="loginUser" required placeholder="Usuario Administrativo">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginClave" required placeholder="Contraseña Maestra">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Ingresar al Sistema</button>
+            </form>
+        </div>
+
+        <div id="dashboardSection" class="hidden fade-in">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2>Panel de <span style="color: var(--accent-blue);">Administración</span></h2>
+                </div>
+                <button id="btnCerrarSesion" class="btn btn-outline">Cerrar Sesión</button>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="glass-card">
+                    <h3>Estado del Sistema</h3>
+                    <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 0.5rem;">
+                        <span style="font-weight: bold;">Inscripciones:</span>
+                        <button id="btnToggleInscripcion" class="btn btn-inscripciones" style="padding: 0.5rem 1rem;"></button>
+                    </div>
+
+                    <button id="btnVerPadron" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+                        Ver Alumnos
+                    </button>
+
+                    <button id="btnAbrirGestorNotas" class="btn btn-inscripciones btn-block" style="margin-top: 1rem; border-color: var(--accent-blue); color: var(--accent-blue);">
+                        Gestión de Calificaciones
+                    </button>
+
+                    <button id="btnAbrirHorarios" class="btn btn-inscripciones btn-block" style="margin-top: 1rem; border-color: #34d399; color: #34d399;">
+                        Horarios y Feriados
+                    </button>
+
+                    <button id="btnAbrirEstadisticas" class="btn btn-inscripciones btn-block" style="margin-top: 1rem; border-color: #f472b6; color: #f472b6;">
+                        Estadísticas del Instituto
+                    </button>
+
+                    <button id="btnExportarPlanillaInscripciones" class="btn btn-inscripciones btn-block" style="margin-top: 1rem; border-color: #a78bfa; color: #a78bfa;">
+                        Exportar Planilla de Inscripciones PDF
+                    </button>
+
+                    <div style="margin-top: 1rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: bold; font-size: 0.9rem;"> Backup de Base de Datos</span>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Auto: Dom — 03:00 hs</span>
+                        </div>
+                        <button id="btnBackupManual" class="btn btn-inscripciones btn-block" style="border-color: #f59e0b; color: #f59e0b; margin-top: 0;">
+                            Generar Backup Ahora
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                        <div style="flex: 1; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent-blue); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <h4 style="color: var(--accent-blue); font-size: 2rem; margin: 0;" id="statAlumnos">0</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Alumnos</span>
+                        </div>
+                        <div style="flex: 1; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-success); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <h4 style="color: var(--accent-success); font-size: 2rem; margin: 0;" id="statProfes">0</h4>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Profesores</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>Alta de Profesores</h3>
+                    <form id="formAltaProfe" style="margin-top: 1rem;">
+                        <div class="input-group">
+                            <input type="number" id="profeDni" required placeholder="DNI del Profesor">
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="profeNombre" required placeholder="Nombre Completo">
+                        </div>
+                        <div class="input-group">
+                            <div style="margin-bottom: 1.5rem; border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                    <h4 style="color: var(--accent-blue); margin: 0;">Asignaciones Académicas</h4>
+                                    <button type="button" id="btnAgregarAsignacion" style="padding: 0.4rem 0.8rem; background: var(--accent-success); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">
+                                        Agregar Asignación
+                                    </button>
+                                </div>
+                                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                                    Hacé clic en "Agregar Asignación" para vincular al profesor con materias.
+                                </p>
+                                <div id="contenedorAsignacionesProfe" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem;"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="profeClave" required placeholder="Asignar Clave (Ej: profe2026)">
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="profeEmail" placeholder="Gmail del Profesor (opcional — se enviarán sus credenciales)">
+                        </div>
+                        <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                <input type="checkbox" id="profePromediarRecup" checked style="display:none;">
+                                <span id="togglePromediarVisual" style="
+                                    display: inline-flex; align-items: center; justify-content: flex-start;
+                                    width: 44px; height: 24px; border-radius: 999px; padding: 3px;
+                                    background: var(--accent-success); border: 2px solid var(--accent-success);
+                                    transition: background 0.25s, border-color 0.25s; flex-shrink: 0;
+                                    cursor: pointer; margin-top: 2px;">
+                                    <span style="width: 16px; height: 16px; border-radius: 50%; background: white;
+                                        transition: transform 0.25s; transform: translateX(20px); display: block;"></span>
+                                </span>
+                                <div>
+                                    <span style="font-weight: 600; display: block;">Promediar parcial con recuperatorio</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        Activado: la nota del período es el promedio de parcial y recuperatorio.<br>
+                                        Desactivado: se toma la nota más alta entre parcial y recuperatorio.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.8rem;">Crear Cuenta Profesor</button>
+                    </form>
+                </div>
+
+                <div class="glass-card" style="grid-column: 1 / -1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <div>
+                            <h3>Carga de historial de Alumnos</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Registrá alumnos y sus materias aprobadas</p>
+                        </div>
+                        <button type="button" id="btnGuardarHistorial" class="btn btn-inscripciones hidden" style="border-color: var(--accent-success); color: var(--accent-success);">
+                            Guardar Historial Seleccionado
+                        </button>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <div class="input-group" style="flex: 1; min-width: 150px; margin: 0;"><label>DNI</label><input type="number" id="histDniBulk" class="filtro-elegante" required></div>
+                            <div class="input-group" style="flex: 2; min-width: 200px; margin: 0;"><label>Nombre</label><input type="text" id="histNombreBulk" class="filtro-elegante" required></div>
+                            <div class="input-group" style="flex: 2; min-width: 200px; margin: 0;">
+                                <label>Carrera</label>
+                                <select id="histCarreraBulk" class="filtro-elegante">
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    <option value="sistemas">Sistemas</option>
+                                    <option value="seguridad">Seguridad e Higiene</option>
+                                    <option value="historia">Historia</option>
+                                    <option value="geografia">Geografía</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 2rem; align-items: center; background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 0.5rem;">
+                            <label for="histSigueCursando" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; margin: 0; user-select: none;">
+                                <input type="checkbox" id="histSigueCursando" checked style="display:none;">
+                                <span id="toggleActivoVisual" style="
+                                    display: inline-flex; align-items: center; justify-content: flex-start;
+                                    width: 44px; height: 24px; border-radius: 999px; padding: 3px;
+                                    background: var(--accent-success); transition: background 0.25s;
+                                    border: 2px solid var(--accent-success); flex-shrink: 0;">
+                                    <span style="width: 16px; height: 16px; border-radius: 50%; background: white;
+                                        transition: transform 0.25s; transform: translateX(20px); display: block;"></span>
+                                </span>
+                                <span id="labelActivoTexto" style="font-weight: bold; color: var(--accent-success);">Activo</span>
+                            </label>
+                            <input type="email" id="histEmailBulk" class="filtro-elegante" placeholder="Email para clave" style="flex: 1;">
+                            <div class="input-group" style="flex: 1; margin: 0; flex-direction: row; align-items: center; gap: 1rem;">
+                                <label style="margin: 0; white-space: nowrap;">Teléfono:</label>
+                                <input type="tel" id="histTelefonoBulk" class="filtro-elegante" placeholder="Ej: 3412345678" style="padding: 0.5rem;">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="contenedorMateriasBulk" style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalGestorNotas" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="width: 90%; max-width: 800px; max-height: 80vh; display: flex; flex-direction: column; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 style="font-size: 1.5rem; margin: 0;">Gestión de <span style="color: var(--accent-blue);">Notas</span></h2>
+                <button id="btnCerrarGestorNotas" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Cerrar</button>
+            </div>
+            <div style="overflow-y: auto; padding-right: 10px; scrollbar-width: thin;">
+                <div class="input-group" style="margin-bottom: 1rem;">
+                    <input type="text" id="buscadorNotasAlumno" class="filtro-elegante" placeholder="Buscar por DNI o Nombre..." style="padding: 0.6rem; font-size: 0.9rem;">
+                </div>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.85rem;">
+                    <thead><tr style="text-align: left; border-bottom: 2px solid var(--border-color);"><th style="padding: 0.8rem;">Alumno</th><th style="padding: 0.8rem;">DNI</th><th style="padding: 0.8rem;">Acción</th></tr></thead>
+                    <tbody id="tablaResultadosNotas"><tr><td colspan="3" style="text-align:center; padding: 1rem;">Escribí para buscar...</td></tr></tbody>
+                </table>
+                <div id="panelEdicionNotas" class="hidden" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                    <h3 id="tituloEdicionAlumno" style="margin-bottom: 1rem; font-size: 1rem; color: var(--accent-success);"></h3>
+                    <div id="contenedorMateriasNotas" style="display: flex; flex-direction: column; gap: 0.8rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalPadron" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2>Ver Alumnos</h2>
+                <button id="btnCerrarPadron" class="btn btn-outline">Cerrar</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                <input type="text" id="busquedaAlumno" class="filtro-elegante" placeholder="Buscar...">
+                <select id="filtroCarreraPadron" class="filtro-elegante">
+                    <option value="todas">Todas las Carreras</option>
+                    <option value="sistemas">Sistemas</option>
+                    <option value="seguridad">Higiene</option>
+                    <option value="historia">Historia</option>
+                    <option value="geografia">Geografía</option>
+                </select>
+
+                <select id="filtroAnoPadron" class="filtro-elegante"><option value="todos">Todos los Años</option></select>
+            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead><tr style="text-align: left; border-bottom: 2px solid var(--border-color);"><th style="padding: 1rem;">Nombre</th><th style="padding: 1rem;">DNI</th><th style="padding: 1rem;">Carrera</th><th style="padding: 1rem;">Contacto</th><th style="padding: 1rem;">Acciones</th></tr></thead>
+                <tbody id="tablaPadron"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modalMotivoAuditoria" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="width: 90%; max-width: 420px; padding: 2.5rem; text-align: center;">
+            <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 1.4rem;">Justificar Modificación</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;" id="textoMotivoAuditoria">
+                Motivo del cambio para registro
+            </p>
+            <input type="text" id="inputMotivoAuditoria" class="filtro-elegante" placeholder="Ej: Aprobó final, Error en carga..." style="margin-bottom: 1.5rem; text-align: center;">
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button id="btnCancelarMotivo" class="btn btn-outline" style="padding: 0.7rem 1.2rem;">Cancelar</button>
+                <button id="btnConfirmarMotivo" class="btn btn-primary" style="padding: 0.7rem 1.2rem;">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+    <div id="modalResetClave" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="text-align: center; max-width: 420px; padding: 2.5rem; z-index: 9999;">
+            <h2 style="margin-bottom: 0.5rem;">Resetear Contraseña</h2>
+            <p id="textoResetClave" style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.5;"></p>
+
+            <div id="resultadoResetClave" class="hidden" style="margin-bottom: 1.5rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Nueva clave generada:</p>
+                <div id="nuevaClaveGenerada"
+                     style="background: rgba(56,189,248,0.1); border: 1px solid var(--accent-blue);
+                        border-radius: 0.5rem; padding: 1rem; font-size: 1.8rem;
+                        font-weight: 800; letter-spacing: 0.3em; color: var(--accent-blue);">
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                    También se envió por gmail al alumno.
+                </p>
+            </div>
+
+            <div id="botonesResetConfirm" style="display: flex; gap: 1rem;">
+                <button id="btnCancelarReset" class="btn btn-outline" style="flex: 1; margin-top: 0;">Cancelar</button>
+                <button id="btnConfirmarReset" class="btn btn-primary" style="flex: 1; margin-top: 0;">Generar Clave</button>
+            </div>
+
+            <button id="btnCerrarReset" class="btn btn-primary btn-block hidden" style="margin-top: 0;">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modalSelectorPlanilla" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="max-width: 420px; width: 90%; padding: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--accent-blue);">Planilla de Inscripciones</h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                Seleccioná la carrera y el año para generar el PDF con las inscripciones por materia.
+            </p>
+            <div class="input-group" style="margin-bottom: 1rem;">
+                <select id="planillaSelectCarrera" style="width:100%; padding:0.7rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); color:white; border-radius:6px; outline:none; font-size:0.9rem;">
+                    <option value="">Seleccioná una carrera...</option>
+                </select>
+            </div>
+            <div class="input-group" style="margin-bottom: 1.5rem;">
+                <select id="planillaSelectAno" style="width:100%; padding:0.7rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); color:white; border-radius:6px; outline:none; font-size:0.9rem;">
+                    <option value="">Primero elegí una carrera...</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:1rem;">
+                <button id="btnCancelarSelectorPlanilla" class="btn btn-outline" style="flex:1;">Cancelar</button>
+                <button id="btnGenerarPlanillaPDF" class="btn btn-primary" style="flex:2;">Generar PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalHorarios" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="width: 96%; max-width: 1000px; max-height: 90vh; overflow-y: auto; padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h2 style="margin: 0;">Horarios y <span style="color: #34d399;">Feriados</span></h2>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.25rem 0 0;">El sistema enviará recordatorios automáticos a las 19:00 si no se cargaron asistencias</p>
+                </div>
+                <button id="btnCerrarHorarios" class="btn btn-outline">Cerrar</button>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0;">
+                <button class="tab-horario active" data-tab="horarios" style="padding: 0.6rem 1.2rem; background: none; border: none; border-bottom: 2px solid #34d399; color: #34d399; font-weight: 600; cursor: pointer; font-size: 0.9rem;">Horarios de Clases</button>
+                <button class="tab-horario" data-tab="feriados" style="padding: 0.6rem 1.2rem; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.9rem;">Feriados</button>
+            </div>
+
+            <div id="panelHorarios">
+                <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1.25rem; margin-bottom: 1.5rem;">
+                    <h4 style="margin: 0 0 1rem; color: #34d399; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Agregar Horario</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr auto; gap: 0.75rem; align-items: end;">
+                        <div>
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Carrera</label>
+                            <select id="hCarrera" class="filtro-elegante" style="width:100%; padding: 0.6rem;">
+                                <option value="">Seleccionar...</option>
+                                <option value="sistemas">Sistemas</option>
+                                <option value="seguridad">Higiene</option>
+                                <option value="historia">Historia</option>
+                                <option value="geografia">Geografía</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Año</label>
+                            <select id="hAno" class="filtro-elegante" style="width:100%; padding: 0.6rem;">
+                                <option value="">Año...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Materia</label>
+                            <select id="hMateria" class="filtro-elegante" style="width:100%; padding: 0.6rem;">
+                                <option value="">Primero elegí carrera/año...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Día</label>
+                            <select id="hDia" class="filtro-elegante" style="width:100%; padding: 0.6rem;">
+                                <option value="">Día...</option>
+                                <option value="1">Lunes</option>
+                                <option value="2">Martes</option>
+                                <option value="3">Miércoles</option>
+                                <option value="4">Jueves</option>
+                                <option value="5">Viernes</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Inicio</label>
+                            <input type="time" id="hHoraInicio" class="filtro-elegante" style="width:100%; padding: 0.6rem;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.3rem;">Fin</label>
+                            <input type="time" id="hHoraFin" class="filtro-elegante" style="width:100%; padding: 0.6rem;">
+                        </div>
+                        <button id="btnGuardarHorario" class="btn btn-primary" style="padding: 0.6rem 1rem; white-space: nowrap;">+ Agregar</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <div style="position: relative; flex: 1; min-width: 200px;">
+                        <input type="text" id="buscadorHorarios" placeholder="Buscar por materia, carrera, día..." class="filtro-elegante"
+                               style="width:100%; padding: 0.6rem 0.75rem 0.6rem 2.25rem; box-sizing: border-box;">
+                    </div>
+                    <span id="contadorHorarios" style="font-size:0.8rem; color:var(--text-secondary); white-space:nowrap;"></span>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 2px solid var(--border-color); color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase;">
+                                <th style="padding: 0.6rem 0.8rem;">Carrera</th>
+                                <th style="padding: 0.6rem 0.8rem;">Año</th>
+                                <th style="padding: 0.6rem 0.8rem;">Materia</th>
+                                <th style="padding: 0.6rem 0.8rem;">Día</th>
+                                <th style="padding: 0.6rem 0.8rem;">Horario</th>
+                                <th style="padding: 0.6rem 0.8rem; text-align: center;">Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaHorarios">
+                            <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-secondary);">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="panelFeriados" class="hidden">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1.25rem;">
+                        <h4 style="margin: 0 0 0.75rem; color: #34d399; font-size: 0.85rem; text-transform: uppercase;">Importar desde API Gobierno AR</h4>
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            <input type="number" id="fAnioImportar" class="filtro-elegante" style="width: 100px; padding: 0.6rem; text-align:center;" value="" placeholder="Año">
+                            <button id="btnImportarFeriados" class="btn btn-primary" style="flex:1;">Importar Feriados</button>
+                        </div>
+                        <p style="font-size:0.75rem; color:var(--text-secondary); margin: 0.5rem 0 0;">Trae todos los feriados nacionales del año seleccionado.</p>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1.25rem;">
+                        <h4 style="margin: 0 0 0.75rem; color: #fbbf24; font-size: 0.85rem; text-transform: uppercase;">Agregar Feriado Manual</h4>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <input type="date" id="fFecha" class="filtro-elegante" style="padding: 0.6rem; flex: 0 0 160px;">
+                            <input type="text" id="fMotivo" class="filtro-elegante" placeholder="Motivo del feriado..." style="flex: 1 1 200px; padding: 0.6rem;">
+                            <button id="btnAgregarFeriado" class="btn btn-primary" style="padding: 0.6rem 1.2rem; white-space: nowrap;">+ Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary);">Ver año:</label>
+                    <select id="filtroAnioFeriados" class="filtro-elegante" style="padding: 0.5rem;">
+                    </select>
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <thead>
+                        <tr style="text-align: left; border-bottom: 2px solid var(--border-color); color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase;">
+                            <th style="padding: 0.6rem 0.8rem;">Fecha</th>
+                            <th style="padding: 0.6rem 0.8rem;">Día</th>
+                            <th style="padding: 0.6rem 0.8rem;">Motivo</th>
+                            <th style="padding: 0.6rem 0.8rem;">Tipo</th>
+                            <th style="padding: 0.6rem 0.8rem; text-align:center;">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFeriados">
+                        <tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-secondary);">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modalEstadisticas" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); align-items:flex-start; justify-content:center; overflow-y:auto; padding: 2rem 1rem;">
+        <div style="background:rgba(30, 41, 59, 0.95); border:1px solid var(--border-color); border-radius:1rem; width:100%; max-width:1000px; box-shadow:0 30px 80px rgba(0,0,0,0.6); margin: auto;">
+
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:1.5rem 2rem; border-bottom:1px solid rgba(255,255,255,0.07);">
+                <div>
+                    <h2 style="margin:0; font-size:1.3rem; color:#f1f5f9;">Estadísticas del Instituto</h2>
+                    <p style="margin:0.25rem 0 0; font-size:0.8rem; color:#64748b;" id="estTimestamp"></p>
+                </div>
+                <button id="btnCerrarEstadisticas" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; border-radius:0.5rem; padding:0.5rem 1rem; cursor:pointer; font-size:0.9rem;">✕ Cerrar</button>
+            </div>
+
+            <div id="estLoading" style="text-align:center; padding:4rem; color:#64748b;">
+                <div style="font-size:2rem; margin-bottom:1rem;">⏳</div>
+                <p>Cargando datos...</p>
+            </div>
+
+            <div id="estContenido" style="display:none; padding:1.5rem 2rem 2rem;">
+
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:1rem; margin-bottom:2rem;">
+                    <div class="kpi-card" style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+                        <div id="kpiAlumnos" style="font-size:2.2rem; font-weight:800; color:#38bdf8; line-height:1;">—</div>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:0.4rem; text-transform:uppercase; letter-spacing:.05em;">Alumnos</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+                        <div id="kpiProfes" style="font-size:2.2rem; font-weight:800; color:#34d399; line-height:1;">—</div>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:0.4rem; text-transform:uppercase; letter-spacing:.05em;">Profesores</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+                        <div id="kpiInscripciones" style="font-size:2.2rem; font-weight:800; color:#a78bfa; line-height:1;">—</div>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:0.4rem; text-transform:uppercase; letter-spacing:.05em;">Inscripciones</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+                        <div id="kpiAprobados" style="font-size:2.2rem; font-weight:800; color:#34d399; line-height:1;">—</div>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:0.4rem; text-transform:uppercase; letter-spacing:.05em;">Aprobados</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.2); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+                        <div id="kpiLibres" style="font-size:2.2rem; font-weight:800; color:#f87171; line-height:1;">—</div>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:0.4rem; text-transform:uppercase; letter-spacing:.05em;">Libres</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.2); border-radius:0.75rem; padding:1.25rem; text-align:center;">
+                        <div id="kpiHomologaciones" style="font-size:2.2rem; font-weight:800; color:#fbbf24; line-height:1;">—</div>
+                        <div style="font-size:0.72rem; color:#64748b; margin-top:0.4rem; text-transform:uppercase; letter-spacing:.05em;">Homologaciones</div>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+
+                    <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.07); border-radius:0.75rem; padding:1.25rem;">
+                        <h4 style="margin:0 0 1rem; font-size:0.85rem; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em;">Alumnos por Carrera</h4>
+                        <canvas id="chartCarreras" height="200"></canvas>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.07); border-radius:0.75rem; padding:1.25rem;">
+                        <h4 style="margin:0 0 1rem; font-size:0.85rem; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em;">Estado Académico Global</h4>
+                        <canvas id="chartEstados" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.07); border-radius:0.75rem; padding:1.25rem; margin-bottom:1.5rem;">
+                    <h4 style="margin:0 0 1rem; font-size:0.85rem; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em;">Aprobación por Materia</h4>
+                    <canvas id="chartMaterias" height="120"></canvas>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(248,113,113,0.2); border-radius:0.75rem; padding:1.25rem;">
+                    <h4 style="margin:0 0 1rem; font-size:0.85rem; color:#f87171; text-transform:uppercase; letter-spacing:.05em;">Alumnos en Riesgo de Quedar Libres</h4>
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; font-size:0.83rem;">
+                            <thead>
+                                <tr style="border-bottom:1px solid rgba(255,255,255,0.08); color:#64748b; font-size:0.75rem; text-transform:uppercase;">
+                                    <th style="padding:0.5rem 0.75rem; text-align:left;">Alumno</th>
+                                    <th style="padding:0.5rem 0.75rem; text-align:left;">Carrera / Año</th>
+                                    <th style="padding:0.5rem 0.75rem; text-align:left;">Materia</th>
+                                    <th style="padding:0.5rem 0.75rem; text-align:center;">Faltas</th>
+                                    <th style="padding:0.5rem 0.75rem; text-align:center;">Límite</th>
+                                    <th style="padding:0.5rem 0.75rem; text-align:center;">Riesgo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaRiesgo">
+                                <tr><td colspan="6" style="text-align:center; padding:2rem; color:#64748b;">Sin datos</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="chart_min.js"></script>
+    <div id="modalConfirmar" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+        <div style="background:#1e1e2e; border:1px solid rgba(255,255,255,0.1); border-radius:0.75rem; padding:2rem; width:100%; max-width:380px; box-shadow:0 20px 60px rgba(0,0,0,0.5); text-align:center;">
+            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🗑️</div>
+            <h3 id="modalConfirmarTitulo" style="margin:0 0 0.5rem; font-size:1.1rem; color:#f1f5f9;">¿Eliminar?</h3>
+            <p id="modalConfirmarSubtitulo" style="margin:0 0 1.5rem; font-size:0.85rem; color:#94a3b8;">Esta acción no se puede deshacer.</p>
+            <div style="display:flex; gap:0.75rem; justify-content:center;">
+                <button id="modalConfirmarCancelar" style="flex:1; padding:0.65rem 1rem; border-radius:0.5rem; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#94a3b8; font-size:0.9rem; cursor:pointer; transition:background 0.2s;">Cancelar</button>
+                <button id="modalConfirmarOk" style="flex:1; padding:0.65rem 1rem; border-radius:0.5rem; border:none; background:#ef4444; color:white; font-size:0.9rem; font-weight:600; cursor:pointer; transition:background 0.2s;">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: sga_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: gestion_academica
+    ports:
+      - "3306:3306"
+    volumes:
+      - sga_db_data:/var/lib/mysql
+      # Se ejecutan en orden alfabético SOLO la primera vez (volumen vacío)
+      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./seed_demo.sql:/docker-entrypoint-initdb.d/02_seed_demo.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASSWORD:-rootpass}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sga_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Host: db
+      Database__Port: "3306"
+      Database__User: root
+      Database__Password: ${DB_ROOT_PASSWORD:-rootpass}
+      Database__Name: gestion_academica
+      Jwt__Secret: ${JWT_SECRET:-cambiar-este-secreto-en-produccion}
+      Email__User: ${EMAIL_USER:-}
+      Email__Password: ${EMAIL_PASSWORD:-}
+      Cors__Origins: http://localhost:8080
+      SiteUrl: http://localhost:8080
+      Backblaze__KeyId: ${BACKBLAZE_KEY_ID:-}
+      Backblaze__AppKey: ${BACKBLAZE_APP_KEY:-}
+      Backblaze__BucketId: ${BACKBLAZE_BUCKET_ID:-}
+
+volumes:
+  sga_db_data:

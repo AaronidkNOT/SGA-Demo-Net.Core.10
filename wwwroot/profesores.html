@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Profesores</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/imagenes/favicon.png">
+    <link rel="apple-touch-icon" href="/imagenes/favicon.png">
+</head>
+<body>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="container fade-in">
+        <nav class="navbar">
+            <div class="navbar-brand">Portal<span> Profesores</span></div>
+        </nav>
+
+        <div id="loginSection" class="glass-card" style="max-width: 400px; margin: 10vh auto; text-align: center;">
+            <h2>Acceso Profesores</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Ingrese credenciales</p>
+            <form id="loginFormDocente">
+                <div class="input-group">
+                    <input type="number" id="loginDni" required placeholder="DNI del Profesor">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginClave" required placeholder="Clave de acceso">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+            </form>
+            <p id="loginError" style="color: var(--accent-danger); margin-top: 1rem; display: none;">Credenciales incorrectas.</p>
+            
+            <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.85rem;">
+                ¿Olvidaste tu clave?
+                <a href="https://wa.me/5493467434302?text=Hola%2C%20olvid%C3%A9%20mi%20clave%20del%20portal%20de%20profesores.%20Mi%20DNI%20es%3A%20"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="color: var(--accent-blue); font-weight: 600; text-decoration: none; white-space: nowrap;">
+                    Contactá al instituto
+                </a>
+            </p>
+        </div>
+
+<section id="selectorAcademicoSection" class="hidden" style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+    
+    <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid var(--border-color); border-radius: 10px; padding: 2rem; width: 100%; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+        
+        <h3 style="text-align: center; color: var(--accent-blue); margin-bottom: 1.5rem; font-size: 1.3rem;">
+            Seleccionar Materia
+        </h3>
+        <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Por favor, elige a qué materia deseas ingresar:
+        </p>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">1. Carrera</label>
+            <select id="selectCarreraProfe" style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none;">
+                <option value="">Cargando carreras...</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">2. Año</label>
+            <select id="selectAnoProfe" style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none;">
+                <option value="">Esperando carrera...</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">3. Materia</label>
+            <select id="selectMateriaProfe" style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none;">
+                <option value="">Esperando año...</option>
+            </select>
+        </div>
+
+        <button id="btnIngresarMateria" style="width: 100%; padding: 0.8rem; background: var(--accent-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem;">
+            Entrar a la Materia
+        </button>
+
+        <div style="text-align: center; margin-top: 1rem;">
+            <button id="btnCancelarSelector" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; text-decoration: underline;">
+                Cancelar y Salir
+            </button>
+        </div>
+
+    </div>
+</section>
+
+        <div id="dashboardSection" class="hidden fade-in">
+            
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                <div>
+                    <h2>Materia: <span id="dashMateria" style="color: var(--accent-blue);"></span></h2>
+                    <p style="color: var(--text-secondary);">Profesor: <span id="dashNombre"></span></p>
+                </div>
+                <button id="btnCerrarSesion" class="btn btn-outline">Cerrar Sesión</button>
+            </header>
+
+            <div class="glass-card" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0;">Gestión Diaria</h3>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <select id="filtroCondicion" class="modality-select" style="padding: 0.5rem; width: auto;">
+                            <option value="TODOS">Todos (CMC/CMI)</option>
+                            <option value="CMC">Solo Presencial (CMC)</option>
+                            <option value="CMI">Solo Virtual (CMI)</option>
+                        </select>
+                        <button id="btnPlanilla" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            Ver Planilla
+                        </button>
+                        <button id="btnNotas" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            Cargar Notas
+                        </button>
+                        <button id="btnExportar" class="btn btn-primary hidden" style="padding: 0.5rem 1rem; font-size: 0.9rem;"> 
+                            Exportar
+                        </button>
+                        <button id="btnVerHistorial" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            Historial Asistencias
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccionDiaria" class="glass-card fade-in">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; padding: 1rem; border-bottom: 1px solid var(--border-color);">Alumno</th>
+                            <th style="text-align: left; padding: 1rem; border-bottom: 1px solid var(--border-color);">DNI</th>
+                            <th style="text-align: left; padding: 1rem; padding-left: 1.6rem; border-bottom: 1px solid var(--border-color);">Condición</th>
+                            <th style="text-align: left; padding: 1rem; border-bottom: 1px solid var(--border-color);">Asistencia Hoy</th>
+                            <th style="text-align: left; padding: 1rem; border-bottom: 1px solid var(--border-color);">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAlumnos">
+                        </tbody>
+                </table>
+            </div>
+
+            <div id="seccionPlanilla" class="glass-card hidden fade-in" style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Planilla de Asistencia General</h3>
+                    <button id="btnCerrarPlanilla" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Cerrar Planilla</button>
+                </div>
+                
+                <div style="width: 100%; overflow-x: auto; padding-bottom: 1rem; scrollbar-width: thin; scrollbar-color: var(--accent-blue) rgba(0,0,0,0.2);">
+                    <table style="width: 100%; min-width: 800px; border-collapse: collapse;">
+                        <thead id="headPlanilla"></thead>
+                        <tbody id="bodyPlanilla"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div> </div> <div id="modalBaja" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="text-align: center; max-width: 400px; padding: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
+            <h2 style="margin-bottom: 1rem; color: var(--accent-danger);">Dar de Baja</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Estás a punto de eliminar al alumno <strong id="nombreAlumnoBaja" style="color: white;"></strong> de tu materia. Esta acción no se puede deshacer y borrará su historial de asistencias.
+            </p>
+            <div style="display: flex; gap: 1rem;">
+                <button id="btnCancelarBaja" class="btn btn-outline" style="flex: 1;">Cancelar</button>
+                <button id="btnConfirmarBaja" class="btn btn-correct" style="flex: 1;">Sí, dar de baja</button>
+            </div>
+        </div>
+    </div>
+    <div id="modalAsistencia" class="modal-overlay hidden">
+    <div class="glass-card fade-in" style="max-width: 600px; width: 90%; padding: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>Tomar Asistencia</h2>
+            <button onclick="cerrarPanelAsistencia()" class="btn btn-outline" style="padding: 0.5rem 1rem;">X</button>
+        </div>
+        
+        <div class="input-group" style="margin-bottom: 1.5rem;">
+            <label for="fechaAsistencia" style="color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">Fecha de la clase:</label>
+            <input type="date" id="fechaAsistencia" class="input-form" style="width: 100%; cursor: pointer;">
+        </div>
+
+        <div style="max-height: 40vh; overflow-y: auto; margin-bottom: 1.5rem;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                        <th style="padding: 1rem 0.5rem;">Alumno</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Presente</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Ausente</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyTomaAsistencia">
+                    </tbody>
+            </table>
+        </div>
+
+        <button onclick="guardarAsistenciaDiaria()" class="btn btn-primary btn-block">Guardar Asistencia</button>
+    </div>
+</div>
+    <div id="modalHistorial" class="modal-overlay hidden">
+    <div class="glass-card fade-in" style="width: 90%; max-width: 600px; padding: 2rem; max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>Historial de Asistencias</h2>
+            <button id="btnCerrarHistorial" class="btn btn-outline" style="padding: 0.5rem 1rem;">X</button>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 1.5rem;">
+            <label for="selectFechaHistorial" style="color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">Seleccionar Fecha:</label>
+            <select id="selectFechaHistorial" class="input-form" style="width: 100%; cursor: pointer;">
+                <option value="">Cargando fechas</option>
+            </select>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                        <th style="padding: 1rem 0.5rem;">Alumno</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyHistorial">
+                    <tr><td colspan="2" style="text-align:center; padding: 1rem; color: var(--text-secondary);">Seleccioná una fecha arriba</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="modalNotas" class="modal-overlay hidden">
+        <div class="glass-card fade-in" style="max-width: 800px; width: 95%; padding: 2rem; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Carga de Calificaciones</h2>
+                <button id="btnCerrarNotas" class="btn btn-outline" style="padding: 0.5rem 1rem;">X</button>
+            </div>
+            
+            <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+                <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <th style="text-align: left; padding: 1rem 0.5rem;">Alumno</th>
+                            <th style="padding: 1rem 0.5rem;">P1</th>
+                            <th style="padding: 1rem 0.5rem;">R1</th>
+                            <th style="padding: 1rem 0.5rem;">P2</th>
+                            <th style="padding: 1rem 0.5rem;">R2</th>
+                            <th style="padding: 1rem 0.5rem; border-left: 2px dashed rgba(255,255,255,0.2); color: var(--accent-warning);">Final</th>
+                            <th style="padding: 1rem 0.5rem; color: var(--accent-warning);">Rec. Fin</th>
+                            <th style="padding: 1rem 0.5rem; border-left: 2px dashed rgba(255,255,255,0.2); color: #a78bfa;">Coloquio</th>
+                            <th style="padding: 1rem 0.5rem;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyNotas"></tbody>
+                </table>
+            </div>
+
+            <button id="btnGuardarNotas" class="btn btn-primary btn-block">Guardar Calificaciones</button>
+        </div>
+    </div>
+    
+    <script src="profesores.js"></script>
+</body>
+</html>

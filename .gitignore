@@ -1,0 +1,28 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+
+## Secretos / config local (nunca commitear)
+appsettings.Local.json
+appsettings.Production.json
+.env
+*.pfx
+*.key
+
+## Backups de la base (nunca commitear dumps reales)
+## (schema.sql y seed_demo.sql SÍ se commitean a propósito: son
+## fixtures del repo, no backups. Los dumps reales del job de backup
+## van a /backups/, no a la raíz, así que ese patrón alcanza.)
+/backups/
+*.bak
+
+## IDE
+.vs/
+.vscode/
+*.swp
+
+## OS
+.DS_Store
+Thumbs.db

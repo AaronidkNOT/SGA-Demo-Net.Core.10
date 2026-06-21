@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción a Materias | Estudiantes</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/imagenes/favicon.png">
+    <link rel="apple-touch-icon" href="/imagenes/favicon.png">
+</head>
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="container fade-in">
+        <nav class="navbar">
+            <div class="navbar-brand">Inscripcion<span> Estudiantes</span></div>
+        </nav>
+
+        <div class="form-wrapper delay-1 fade-in">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2>Inscripción a Cursada</h2>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                    ISP N° 62 Ángela Cullen - San José de la Esquina - Santa Fe
+                </p>
+            </div>
+
+            <form id="inscriptionForm">
+                <div class="form-grid glass-card fade-in">
+                    <div class="input-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Alan Turing">
+                    </div>
+                    <div class="input-group">
+                        <label for="dni">DNI</label>
+                        <input type="number" id="dni" required placeholder="Sin puntos">
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" required placeholder="alumno@instituto.edu">
+                    </div>
+                    <div class="input-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" required placeholder="+54 9 ...">
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="carrera">Carrera a inscribirse</label>
+                        <select id="carrera" required>
+                            <option value="" disabled selected>Seleccione una carrera...</option>
+                            <option value="sistemas">Tec. Sup. en Análisis Funcional de Sistemas Informáticos</option>
+                            <option value="seguridad">Tec. Sup. en Seguridad e Higiene</option>
+                            <option value="historia">Profesorado de Historia</option>
+                            <option value="geografia">Profesorado en Geografía</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="anoSelect">Año de cursada</label>
+                        <select id="anoSelect" required disabled>
+                            <option value="" disabled selected>Primero seleccione una carrera</option>
+                            </select>
+                    </div>
+                </div>
+
+                <div class="input-group full-width" style="margin-top: 2rem;">
+                    <label>Materias Disponibles para el año seleccionado</label>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;" id="materiasAviso">
+                        Seleccione carrera y año para ver la oferta.
+                    </p>
+                    <div class="subject-list" id="subjectList">
+                        </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Generar Inscripción</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <a href="perfil" style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">
+                    Ya tengo clave, ir a mi perfil
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="glass-card fade-in" style="text-align: center; max-width: 450px; padding: 3rem;">
+            <h2 style="margin-bottom: 1rem;">¡Inscripción Exitosa!</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Tu vacante ha sido confirmada. Utilizá tu DNI y esta clave única para gestionar tu cursada desde el portal.
+            </p>
+            <div style="background: rgba(0,0,0,0.4); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                <span style="display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 0.5rem;">Tu Clave de Acceso</span>
+                
+                <span id="claveGenerada" style="font-size: 2.5rem; font-weight: 800; letter-spacing: 8px; color: #10b981; text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">
+                    ------
+                </span>
+            </div>
+            <button id="btnIrPerfil" class="btn btn-primary btn-block">Entendido, ir a mi Perfil</button>
+        </div>
+    </div>
+
+    <div id="modalAlerta" class="modal-overlay">
+        <div class="glass-card fade-in" style="text-align: center; max-width: 400px; padding: 2.5rem; z-index: 9999;">
+            <div id="iconoAlerta" style="font-size: 3.5rem; margin-bottom: 1rem;">⛔</div>
+            <h2 id="tituloAlerta" style="margin-bottom: 1rem;">Atención</h2>
+            <p id="mensajeAlerta" style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.5;"></p>
+            <button id="btnCerrarAlerta" class="btn btn-primary btn-block">Entendido</button>
+        </div>
+    </div>
+    <script src="estudiantes.js"></script>
+</body>
+</html>

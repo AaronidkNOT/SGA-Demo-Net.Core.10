@@ -1,0 +1,10 @@
+﻿namespace Web_uni_C_.Models
+{
+    public class Materia
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Duracion { get; set; }
+
+    }
+}

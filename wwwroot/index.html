@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Académica</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/imagenes/favicon.png">
+    <link rel="apple-touch-icon" href="/imagenes/favicon.png">
+</head>
+<body>
+    <div class="container fade-in">
+        <nav class="navbar">
+            <div class="navbar-brand">Sistema de<span> Gestion Académica</span></div>
+            <div>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">Plataforma general</span>
+            </div>
+        </nav>
+
+        <header style="text-align: center; margin-bottom: 4rem;">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem; letter-spacing: -1px;"><span style="color: var(--accent-blue);">Gestión Académica</span></h1>
+            <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Seleccione su portal de acceso.
+            </p>
+        </header>
+
+        <main class="dashboard-grid delay-1 fade-in">
+            <article class="module-card">
+                <h2 style="margin-bottom: 1rem; font-size: 1.5rem;">Portal de Estudiantes</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    Inscripción a materias y gestión de modalidades (CMC, CMI, Libre).
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <a href="estudiantes" class="btn btn-primary" style="text-decoration: none;">Inscripción</a>
+                </div>
+            </article>
+
+            <article class="module-card">
+                <h2 style="margin-bottom: 1rem; font-size: 1.5rem;">Portal de Profesores</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    Calificaciones, correlatividades (CMC, CMI y Libre) y control de regularidad.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <a href="profesores" class="btn btn-primary" style="text-decoration: none;">Acceso Docente</a>
+                </div>
+            </article>
+
+            <article class="module-card">
+                <h2 style="margin-bottom: 1rem; font-size: 1.5rem;">Administración</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    Automatización de fin de ciclo y gestión de profesores
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <a href="admin" class="btn btn-primary" style="text-decoration: none;">Acceso Administrativo</a>
+                </div>
+            </article>
+        </main>
+    </div>
+</body>
+</html>
